@@ -1,0 +1,146 @@
+Заходим в Shell
+    python manage.py shell
+
+Импортирую все модели
+    from news.models import *
+
+
+1). Создать двух пользователей (с помощью метода User.objects.create_user
+('username')).
+    u1 = User.objects.create_user(username='Bob Djons')
+    u2 = User.objects.create_user(username='Djek Ricer')
+
+2). Создать два объекта модели Author, связанные с пользователями.
+    Author.objects.create(authorUser=u1)
+    Author.objects.create(authorUser=u2)
+
+3). Добавить 4 категории в модель Category.
+    Category.objects.create(name='Health')   Здоровье  Health
+    Category.objects.create(name='Story')    История   Story
+    Category.objects.create(name='Culture')  Культура  Culture
+    Category.objects.create(name='Society')  Общество  Society
+
+
+4). Добавить 2 статьи и 1 новость.
+    au1 = Author.objects.get(id=1)  # Добавил две переменные с авторами через
+    au2 = Author.objects.get(id=2)  # get запрос по id
+
+     Post.objects.create(author=au1, categoryType='AR',
+     title='Мариинский театр', text='Мариинский
+    театр завершил строительство своей «вагнерианы», представив комическую
+    оперу композитора. Длинны й, назидательный опус немецкого гения сумели
+    подать ярко и музыкально безупречно.')
+
+     Post.objects.create(author=au1, categoryType='AR', title='Исторические
+     сведения о здоровье', text='Основа гимнастических упражнений «Русской
+     здравы» – это способы укрепления организма, необходимые для развития
+     качеств хорошего воина. В те времена, когда каждый мужчина должен был
+     обладать способностью в любой момент превратиться из мирного пахаря в
+     грозного защитника своего дома и семьи, это было более чем оправданно.
+     Поэтому воинские практики использовались уже в воспитании детей,
+     что укрепляло не только тело ребенка, но и его дух.')
+
+     Post.objects.create(author=au2, categoryType='NW',
+     title='Покорители морей', text='МОСКВА, 7 авг — РИА Новости,
+     Мария Селиванова. Первое русское кругосветное плавание началось 7
+     августа 1803 года — ровно 220 лет назад. Небольшие корабли "Нева" и
+     "Надежда" вышли из Кронштадта, а вернулись через три года и 12 дней.
+     Сегодня путешественники по-прежнему стремятся обогнуть Землю — на
+     самолетах, лодках, мотоциклах, даже велосипедах. Какие поездки
+     официально считаются кругосветками, сколько стоит такой тур и в чем его
+     сложность — в материале РИА Новости.')
+
+5). Присвоить им категории (как минимум в одной статье/новости должно быть не
+меньше 2 категорий).
+
+    Присвоил постам по id через метод add категории
+     Мариинский театр -- 'Culture'
+    Post.objects.get(id=1).postCategory.add(Category.objects.get(id=3))
+     Мариинский театр -- 'Society'
+    Post.objects.get(id=1).postCategory.add(Category.objects.get(id=4))
+     Исторические сведения о здоровье -- 'Health'
+    Post.objects.get(id=2).postCategory.add(Category.objects.get(id=1))
+     Исторические сведения о здоровье -- 'Story'
+    Post.objects.get(id=2).postCategory.add(Category.objects.get(id=2))
+     Покорители морей -- 'Story'
+    Post.objects.get(id=3).postCategory.add(Category.objects.get(id=2))
+     Покорители морей -- 'Society'
+    Post.objects.get(id=3).postCategory.add(Category.objects.get(id=4))
+
+
+6). Создать как минимум 4 комментария к разным объектам модели Post (в каждом
+объекте должен быть как минимум один комментарий).
+
+    Comment.objects.create(commentPost=Post.objects.get(id=1),
+    commentUser=User.objects.get(id=1), text='Интересная статья, мне очень
+    понравилась')
+
+    Comment.objects.create(commentPost=Post.objects.get(id=1),
+    commentUser=User.objects.get(id=2), text='Интересная статья, мне
+    понравилась')
+
+    Comment.objects.create(commentPost=Post.objects.get(id=2),
+    commentUser=User.objects.get(id=2), text='Cтатья понравилась')
+
+    Comment.objects.create(commentPost=Post.objects.get(id=3),
+    commentUser=User.objects.get(id=1), text='Хороший тур')
+
+7). Применяя функции like() и dislike() к статьям/новостям и комментариям,
+скорректировать рейтинги этих объектов.
+    Comment.objects.get(id=1).like()
+    Comment.objects.get(id=1).like()
+    Comment.objects.get(id=2).like()
+    Comment.objects.get(id=3).like()
+    Comment.objects.get(id=3).like()
+    Comment.objects.get(id=4).like()
+    Comment.objects.get(id=2).dislike()
+    Comment.objects.get(id=2).dislike()
+    Post.objects.get(id=3).dislike()
+    Post.objects.get(id=3).dislike()
+    Post.objects.get(id=3).dislike()
+
+8). Обновить рейтинги пользователей.
+
+    au1.update_rating()
+    au2.update_rating()
+
+9). Вывести username и рейтинг лучшего пользователя (применяя сортировку и
+возвращая поля первого объекта).
+     a = Author.objects.order_by('-ratingAuthor')[:1]
+        <QuerySet [<Author: Author object (1)>]>
+
+    for i in a:
+         i.authorUser.username
+         i.ratingAuthor
+
+        'Bob Djons'
+        30
+
+10). Вывести дату добавления, username автора, рейтинг, заголовок и превью
+лучшей статьи, основываясь на лайках/дислайках к этой статье.
+     p = Post.objects.order_by('-rating') [:1]
+     for i in p:
+         i.dateCreation
+         i.author.authorUser.username
+         i.rating
+         i.title
+         i.preview()
+
+11). Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой
+статье.
+
+    Post.objects.all().order_by('-rating')[0].comment_set.values(
+        'dateCreation', 'commentUser', 'rating', 'text')
+
+<QuerySet [{'dateCreation':
+datetime.datetime(2023, 8, 7, 10, 52, 23, 789293,
+tzinfo=datetime.timezone.utc), 'commentUser': 2, 'rating': 2,
+'text': 'Cтатья понравилась'},
+
+{'dateCreation': datetime.datetime(2023, 8, 8, 12, 42, 51, 559424,
+tzinfo=datetime.timezone.utc), 'commentUser': 1, 'rating': 0,
+'text': 'Нужен ещё один комент для вывода'},
+
+{'dateCreation': datetime.datetime(2023, 8, 8, 12, 43, 11, 278187,
+tzinfo=datetime.timezone.utc), 'commentUser': 1, 'rating': 0,
+'text': 'Нужен ещё один комент для вывода 2'}]>
