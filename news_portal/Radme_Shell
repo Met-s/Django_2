@@ -7,12 +7,12 @@
 
 1). Создать двух пользователей (с помощью метода User.objects.create_user
 ('username')).
-    u1 = User.objects.create_user(username='Bob Djons')
-    u2 = User.objects.create_user(username='Djek Ricer')
+    u1 = User.objects.create_user(username='Bo Djon')
+    u2 = User.objects.create_user(username='Dek Ricers')
 
 2). Создать два объекта модели Author, связанные с пользователями.
-    Author.objects.create(authorUser=u1)
-    Author.objects.create(authorUser=u2)
+    Author.objects.create(author_user=u1)
+    Author.objects.create(author_user=u2)
 
 3). Добавить 4 категории в модель Category.
     Category.objects.create(name='Health')   Здоровье  Health
@@ -25,13 +25,13 @@
     au1 = Author.objects.get(id=1)  # Добавил две переменные с авторами через
     au2 = Author.objects.get(id=2)  # get запрос по id
 
-     Post.objects.create(author=au1, categoryType='AR',
+     Post.objects.create(author=au1, category_type='AR',
      title='Мариинский театр', text='Мариинский
     театр завершил строительство своей «вагнерианы», представив комическую
     оперу композитора. Длинны й, назидательный опус немецкого гения сумели
     подать ярко и музыкально безупречно.')
 
-     Post.objects.create(author=au1, categoryType='AR', title='Исторические
+     Post.objects.create(author=au1, category_type='AR', title='Исторические
      сведения о здоровье', text='Основа гимнастических упражнений «Русской
      здравы» – это способы укрепления организма, необходимые для развития
      качеств хорошего воина. В те времена, когда каждый мужчина должен был
@@ -40,7 +40,7 @@
      Поэтому воинские практики использовались уже в воспитании детей,
      что укрепляло не только тело ребенка, но и его дух.')
 
-     Post.objects.create(author=au2, categoryType='NW',
+     Post.objects.create(author=au2, category_type='NW',
      title='Покорители морей', text='МОСКВА, 7 авг — РИА Новости,
      Мария Селиванова. Первое русское кругосветное плавание началось 7
      августа 1803 года — ровно 220 лет назад. Небольшие корабли "Нева" и
@@ -55,24 +55,24 @@
 
     Присвоил постам по id через метод add категории
      Мариинский театр -- 'Culture'
-    Post.objects.get(id=1).postCategory.add(Category.objects.get(id=3))
+    Post.objects.get(id=1).post_category.add(Category.objects.get(id=3))
      Мариинский театр -- 'Society'
-    Post.objects.get(id=1).postCategory.add(Category.objects.get(id=4))
+    Post.objects.get(id=1).post_category.add(Category.objects.get(id=4))
      Исторические сведения о здоровье -- 'Health'
-    Post.objects.get(id=2).postCategory.add(Category.objects.get(id=1))
+    Post.objects.get(id=2).post_category.add(Category.objects.get(id=1))
      Исторические сведения о здоровье -- 'Story'
-    Post.objects.get(id=2).postCategory.add(Category.objects.get(id=2))
+    Post.objects.get(id=2).post_category.add(Category.objects.get(id=2))
      Покорители морей -- 'Story'
-    Post.objects.get(id=3).postCategory.add(Category.objects.get(id=2))
+    Post.objects.get(id=3).post_category.add(Category.objects.get(id=2))
      Покорители морей -- 'Society'
-    Post.objects.get(id=3).postCategory.add(Category.objects.get(id=4))
+    Post.objects.get(id=3).post_category.add(Category.objects.get(id=4))
 
 
 6). Создать как минимум 4 комментария к разным объектам модели Post (в каждом
 объекте должен быть как минимум один комментарий).
 
-    Comment.objects.create(commentPost=Post.objects.get(id=1),
-    commentUser=User.objects.get(id=1), text='Интересная статья, мне очень
+    Comment.objects.create(comment_post=Post.objects.get(id=1),
+    comment_user=User.objects.get(id=1), text='Интересная статья, мне очень
     понравилась')
 
     Comment.objects.create(commentPost=Post.objects.get(id=1),
@@ -110,37 +110,66 @@
         <QuerySet [<Author: Author object (1)>]>
 
     for i in a:
-         i.authorUser.username
-         i.ratingAuthor
+         i.author_user.username
+         i.rating_author
 
-        'Bob Djons'
+        'Bod Djon'
         30
+
 
 10). Вывести дату добавления, username автора, рейтинг, заголовок и превью
 лучшей статьи, основываясь на лайках/дислайках к этой статье.
      p = Post.objects.order_by('-rating') [:1]
      for i in p:
-         i.dateCreation
-         i.author.authorUser.username
+         i.date_creation
+         i.author.author_user.username
          i.rating
          i.title
          i.preview()
 
+         datetime.datetime(2023, 8, 14, 18, 44, 20, 896188, tzinfo=datetime.timezone.utc)
+        'Bod Djon'
+        7
+        'Мариинский театр'
+        'Мариинский театр завершил строительство своей «вагнерианы», представив комическую оперу к
+        омпозитора. Длинный, назидательный о...'
+
+
 11). Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой
 статье.
 
-    Post.objects.all().order_by('-rating')[0].comment_set.values(
-        'dateCreation', 'commentUser', 'rating', 'text')
+    >>> Post.objects.all().order_by('-rating')[0].comment_set.values('date_creation', 'comment
+_user', 'rating', 'text')
 
-<QuerySet [{'dateCreation':
-datetime.datetime(2023, 8, 7, 10, 52, 23, 789293,
-tzinfo=datetime.timezone.utc), 'commentUser': 2, 'rating': 2,
-'text': 'Cтатья понравилась'},
+<QuerySet [
+{'date_creation': datetime.datetime(2023, 8, 14, 18, 52, 59, 822517, tzinfo=dat
+etime.timezone.utc), 'comment_user': 1, 'rating': 2, 'text': 'Интересная статья, мне очень
+ понравилась'},
 
-{'dateCreation': datetime.datetime(2023, 8, 8, 12, 42, 51, 559424,
-tzinfo=datetime.timezone.utc), 'commentUser': 1, 'rating': 0,
-'text': 'Нужен ещё один комент для вывода'},
+ {'date_creation': datetime.datetime(2023, 8, 14, 18, 55, 25, 759691, tzinf
+o=datetime.timezone.utc), 'comment_user': 2, 'rating': -1, 'text': 'Интересная статья, мне
+ понравилась'},
 
-{'dateCreation': datetime.datetime(2023, 8, 8, 12, 43, 11, 278187,
-tzinfo=datetime.timezone.utc), 'commentUser': 1, 'rating': 0,
-'text': 'Нужен ещё один комент для вывода 2'}]>
+ {'date_creation': datetime.datetime(2023, 8, 15, 10, 31, 55, 896297, tzinf
+o=datetime.timezone.utc), 'comment_user': 3, 'rating': 0, 'text': 'Интересная статья, мне
+очень понравилась'},
+
+{'date_creation': datetime.datetime(2023, 8, 15, 10, 33, 13, 112921,
+tzinfo=datetime.timezone.utc), 'comment_user': 4, 'rating': 0, 'text': 'Интересная статья,
+ мне очень понравилась'},
+
+ {'date_creation': datetime.datetime(2023, 8, 15, 10, 49, 42, 756
+035, tzinfo=datetime.timezone.utc), 'comment_user': 4, 'rating': 0, 'text': 'Интересная ст
+атья, мне очень понравилась'},
+
+{'date_creation': datetime.datetime(2023, 8, 15, 10, 49, 59
+, 946946, tzinfo=datetime.timezone.utc), 'comment_user': 3, 'rating': 0, 'text': 'Интересн
+ая статья, мне очень понравилась'}]>
+
+
+
+ au2.author_user.comment_set.all()
+ Post.objects.get(id=1).rating
+  Comment.objects.create(comment_post=Post.objects.get(id=2), comment_user=User.objects.
+get(id=3), text='Интересная статья, мне очень понравилась')
+Внимательней с id автора
