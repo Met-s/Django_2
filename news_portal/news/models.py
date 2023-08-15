@@ -10,12 +10,9 @@ class Author(models.Model):
 
     def update_rating(self, prat, crat):
         post_rat = self.post_set.aggregate(postrating=Sum('rating'))
-
         prat += post_rat.get('postrating')
-
         comment_rat = self.author_user.comment_set.aggregate(
             commentrating=Sum('rating'))
-
         crat += comment_rat.get('commentrating')
         self.rating_author = prat * 3 + crat
         self.save()
