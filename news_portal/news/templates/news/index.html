@@ -1,0 +1,15 @@
+{% extends 'news/default.html' %}
+
+
+
+{% block title %}
+Article
+{% endblock title %}
+
+
+{% block content %}
+<h3>{{ article.title }}</h3>
+<hr
+<h>{{ article.text }}</h>
+<h4>{{ article.date_creation|date:'d M Y' }}</h4>
+{% endblock content %}

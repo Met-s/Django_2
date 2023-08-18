@@ -31,7 +31,7 @@ class Post(models.Model):
         (ARTICLE, 'Статья'),
     )
     category_type = models.CharField(max_length=2, choices=CATEGORY_CHOICES)
-    date_creation = models.DateTimeField(auto_now_add=True)
+    date_creation = models.DateTimeField(auto_now_add=True, )
     post_category = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=54)
     text = models.TextField()
@@ -47,6 +47,9 @@ class Post(models.Model):
 
     def preview(self):
         return self.text[0:125] + '...'
+
+    def __str__(self):
+        return f'{self.pk} : {self.title} : {self.text} : {self.date_creation}'
 
 
 class PostCategory(models.Model):

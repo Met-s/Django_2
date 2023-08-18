@@ -1,0 +1,20 @@
+{% extends 'news/default.html' %}
+
+<!-- Название у нас будет Product -->
+{% block title %}
+News
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого
+был передан в url -->
+{% block content %}
+<h1>Все статьи</h1>
+<hr>
+{% for i in news %}
+    <h>{{ i.id }}</h>
+    <h3>{{ i.title }}</h3>
+    <h>{{ i.date_creation|date:'d M Y' }}</h>
+    <h>{{ i.text | truncatechars:20 }}</h>
+    <hr>
+{% endfor %}
+{% endblock content %}
