@@ -1,6 +1,5 @@
 {% extends 'news/default.html' %}
-
-
+{% load filter_cenz %}
 
 {% block title %}
 Article
@@ -8,8 +7,8 @@ Article
 
 
 {% block content %}
-<h3>{{ article.title }}</h3>
+<h3>{{ article.title | censor }}</h3>
 <hr
-<h>{{ article.text }}</h>
-<h4>{{ article.date_creation|date:'d M Y' }}</h4>
+<h>{{ article.text | censor }}</h>
+<h4>{{ article.date_creation | date:'d M Y' }}</h4>
 {% endblock content %}
