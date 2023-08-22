@@ -8,6 +8,7 @@ class PostList(ListView):
     ordering = '-date_creation'
     template_name = 'post_list.html'
     context_object_name = 'news'
+    paginate_by = 10
 
 
 class PostDetailView(DetailView):
